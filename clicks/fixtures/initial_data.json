@@ -94,4 +94,38 @@
 			"domain_name": "dailynews-7.com"
 		}
 	}, 
-	{"pk": 2, "model": "clicks.domainofferset", "fields": {"domain_name": "channel9-news.com"}}, {"pk": 3, "model": "clicks.domainofferset", "fields": {"domain_name": " test1.billsforless.net"}}, {"pk": 1, "model": "clicks.offerset", "fields": {"category": "diet", "domain": 3, "offerset_name": "", "offer1": 1, "offer2": 2, "total_offers": 2, "offerset_desc": "", "active": true}}, {"pk": 1, "model": "clicks.siteofferset", "fields": {"active": true, "offer_set": 1, "site": 1, "traffic_ratio": 100}}]
+	{"pk": 2, 
+		"model": "clicks.domainofferset", 
+		"fields": {
+			"domain_name": "channel9-news.com"
+		}
+	}, 
+	{"pk": 3, 
+		"model": "clicks.domainofferset", 
+		"fields": {
+			"domain_name": " test1.billsforless.net"
+		}
+	}, 
+	{"pk": 1, 
+		"model": "clicks.offerset", 
+		"fields": {
+			"category": "diet", 
+			"domain": 3, 
+			"offerset_name": "", 
+			"offer1": 1, 
+			"offer2": 2, 
+			"total_offers": 2, 
+			"offerset_desc": "", 
+			"active": true
+		}
+	}, 
+	{"pk": 1, 
+		"model": "clicks.siteofferset", 
+			"fields": {
+				"active": true, 
+				"offer_set": 1, 
+				"site": 1, 
+				"traffic_ratio": 100
+		}
+	}
+]
