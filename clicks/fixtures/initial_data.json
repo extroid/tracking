@@ -1,0 +1,97 @@
+[
+	{
+		"pk": 1, 
+		"model": "clicks.landingsite", 
+		"fields": 
+			{"category": "diet", 
+			"page1_name": "acai version 1", 
+			"traffic_ratio": 100, 
+			"redirect_on_exit": true, 
+			"page1_desc": "Ben's site", 
+			"total_offers": 2, 
+			"page1_template": "acai1.html", 
+			"active": true, 
+			"exit_page_template": null
+			}
+	}, 
+	{"pk": 2, 
+	"model": "clicks.landingsite", 
+	"fields": 
+		{"category": "diet", 
+		"page1_name": "acai version 1", 
+		"traffic_ratio": 100, 
+		"redirect_on_exit": true, 
+		"page1_desc": "Ben's site", 
+		"total_offers": 2, 
+		"page1_template": "acai1.html", 
+		"active": true, 
+		"exit_page_template": null
+		}
+	}, 
+	{"pk": 1, 
+		"model": "clicks.offer", 
+		"fields": {
+			"payout": 50.0, 
+			"display_name": "Lean Spa", 
+			"coupon": null, 
+			"offer_id": "10107", 
+			"price_old": null, 
+			"active": true, 
+			"price_new": null, 
+			"offer_name": "Lean Spa US", 
+			"network_name": "eadv", 
+			"offer_url": "http://www.leanspa.com?s="
+			}
+	}, 
+	{"pk": 2, 
+		"model": "clicks.offer", 
+		"fields": {
+			"payout": 50.0, 
+			"display_name": "ColoThin", 
+			"coupon": "COLOSAVE", 
+			"offer_id": "2345", 
+			"price_old": "3.99", 
+			"active": true, 
+			"price_new": "1.99", 
+			"offer_name": "ColoThin", 
+			"network_name": "eadv", 
+			"offer_url": "http://www.colothin.com?s="
+			}
+		}, 
+	{"pk": 3, 
+		"model": "clicks.offer", 
+		"fields": {
+			"payout": 50.0, 
+			"display_name": "Lean Spa", 
+			"coupon": null, 
+			"offer_id": "10107", 
+			"price_old": null, 
+			"active": true, 
+			"price_new": null, 
+			"offer_name": "Lean Spa US", 
+			"network_name": "eadv", 
+			"offer_url": "http://www.leanspa.com?s="
+			}
+		}, 
+	{"pk": 4, 
+		"model": "clicks.offer", 
+		"fields": {
+			"payout": 50.0, 
+			"display_name": "ColoThin", 
+			"coupon": "COLOSAVE", 
+			"offer_id": "2345", 
+			"price_old": "3.99", 
+			"active": true, 
+			"price_new": "1.99", 
+			"offer_name": "ColoThin", 
+			"network_name": "eadv", 
+			"offer_url": "http://www.colothin.com?s="
+			}
+		}, 
+	{"pk": 1, 
+		"model": "clicks.domainofferset", 
+		"fields": {
+			"domain_name": "dailynews-7.com"
+		}
+	}, 
+	{"pk": 2, "model": "clicks.domainofferset", "fields": {"domain_name": "channel9-news.com"}}, {"pk": 3, "model": "clicks.domainofferset", "fields": {"domain_name": " test1.billsforless.net"}}, {"pk": 1, "model": "clicks.offerset", "fields": {"category": "diet", "domain": 3, "offerset_name": "", "offer1": 1, "offer2": 2, "total_offers": 2, "offerset_desc": "", "active": true}}, {"pk": 1, "model": "clicks.siteofferset", "fields": {"active": true, "offer_set": 1, "site": 1, "traffic_ratio": 100}}]
