@@ -59,7 +59,7 @@ class OfferSet(models.Model):
     offerset_desc = models.CharField(max_length=100)
     category = models.CharField(max_length=30)
     active = models.BooleanField(default=False)
-    domain = models.ManyToManyField(DomainOfferSet)
+    domain = models.ForeignKey(DomainOfferSet)
 
     class Meta:
         verbose_name=_(u'Offer set')
