@@ -7,6 +7,8 @@ ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
+SITE_ROOT = os.path.dirname(__file__)
+
 MANAGERS = ADMINS
 
 DATABASES = {
@@ -76,7 +78,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'tracking.urls'
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+
 TEMPLATE_DIRS = (
                  os.path.join(SITE_ROOT, 'templates')
 
@@ -98,3 +100,8 @@ INSTALLED_APPS = (
     'clicks',
     'stats',
 )
+
+try:
+    from local_settings import *
+except:
+    pass    

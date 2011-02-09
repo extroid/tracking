@@ -1,6 +1,7 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
 import datetime
-from django.contrib import admin
 
 # Create your models here.
 class LandingSite(models.Model):
@@ -13,6 +14,13 @@ class LandingSite(models.Model):
     redirect_on_exit = models.BooleanField(default = False)
     traffic_ratio = models.IntegerField(default = 100)
     active = models.BooleanField(default = False)
+    
+    class Meta:
+        verbose_name=_(u'Landing site')
+        verbose_name_plural=_(u'Landing sites')
+    
+    def __unicode__ (self):
+        return '%s/%s offers %d ratio %d' % (self.category, self.page1_name, self.total_offers, self.traffic_ratio)
 
 class Offer(models.Model):
     network_name = models.CharField(max_length=30, null = True)
@@ -26,9 +34,22 @@ class Offer(models.Model):
     price_old = models.CharField(max_length=10, null=True)
     price_new = models.CharField(max_length=10, null=True)
     
+    class Meta:
+        verbose_name=_(u'Offer')
+        verbose_name_plural=_(u'Offers')
+        
+    def __unicode__ (self):
+        return '%s/%s payout %d' % (self.network_name, self.offer_name, self.payout)
         
 class DomainOfferSet(models.Model):
     domain_name = models.CharField(max_length = 50)
+    
+    class Meta:
+        verbose_name=_(u'Domain offer set')
+        verbose_name_plural=_(u'Domain offer sets')
+        
+    def __unicode__ (self):
+        return self.domain_name
     
 class OfferSet(models.Model):
     offer1 = models.ForeignKey(Offer, related_name = "first_offer")
@@ -38,7 +59,14 @@ class OfferSet(models.Model):
     offerset_desc = models.CharField(max_length=100)
     category = models.CharField(max_length=30)
     active = models.BooleanField(default=False)
-    domain = models.ForeignKey(DomainOfferSet)
+    domain = models.ManyToManyField(DomainOfferSet)
+
+    class Meta:
+        verbose_name=_(u'Offer set')
+        verbose_name_plural=_(u'Offer sets')
+        
+    def __unicode__ (self):
+        return '%s/%s/%s' % (self.domain, self.category, self.offerset_name)
 
 class SiteOfferSet(models.Model):
     site = models.ForeignKey(LandingSite)
@@ -46,6 +74,12 @@ class SiteOfferSet(models.Model):
     traffic_ratio = models.IntegerField(default = 100)
     active = models.BooleanField(default = True)
     
+    class Meta:
+        verbose_name=_(u'Site offer set')
+        verbose_name_plural=_(u'Site offer sets')
+        
+    def __unicode__ (self):
+        return '%s/%s ratio %d' % (self.site, self.offer_set, self.traffic_ratio)
 
 class Visitor(models.Model):
     date_time = models.DateTimeField(default = datetime.datetime.now())
@@ -77,3 +111,10 @@ class Visitor(models.Model):
     offer1_link_tag = models.CharField(max_length=10, null=True)
     offer2_link_tag = models.CharField(max_length=10, null=True)
     cost_per_click = models.FloatField(null=True,default=1.00)
+    
+    class Meta:
+        verbose_name=_(u'Visitor')
+        verbose_name_plural=_(u'Visitors')
+        
+    def __unicode__ (self):
+        return '%s -> %s %s' % (self.referer, self.account, self.campaign)
