@@ -1,9 +1,23 @@
 [
-	{
-		"pk": 1, 
+	{"pk":1,
+		"model": "clicks.Category",
+			"fields": {
+				"name": "diet"
+			}
+	},
+	{"pk":1,
+		"model": "clicks.CpaNetwork",
+			"fields": {
+				"name": "eadv",
+				"login": "admin",
+				"affiliate_id": "admin",
+				"password": "admin"
+			}
+	},
+	{"pk": 1, 
 		"model": "clicks.landingsite", 
 		"fields": 
-			{"category": "diet", 
+			{"category": 1, 
 			"page1_name": "acai version 1", 
 			"traffic_ratio": 100, 
 			"redirect_on_exit": true, 
@@ -17,7 +31,7 @@
 	{"pk": 2, 
 	"model": "clicks.landingsite", 
 	"fields": 
-		{"category": "diet", 
+		{"category": 1, 
 		"page1_name": "acai version 1", 
 		"traffic_ratio": 100, 
 		"redirect_on_exit": true, 
@@ -38,9 +52,9 @@
 			"price_old": null, 
 			"active": true, 
 			"price_new": null, 
-			"offer_name": "Lean Spa US", 
-			"network_name": "eadv", 
-			"offer_url": "http://www.leanspa.com?s="
+			"name": "Lean Spa US", 
+			"network": 1, 
+			"url": "http://www.leanspa.com?s="
 			}
 	}, 
 	{"pk": 2, 
@@ -53,9 +67,9 @@
 			"price_old": "3.99", 
 			"active": true, 
 			"price_new": "1.99", 
-			"offer_name": "ColoThin", 
-			"network_name": "eadv", 
-			"offer_url": "http://www.colothin.com?s="
+			"name": "ColoThin", 
+			"network": 1, 
+			"url": "http://www.colothin.com?s="
 			}
 		}, 
 	{"pk": 3, 
@@ -68,9 +82,9 @@
 			"price_old": null, 
 			"active": true, 
 			"price_new": null, 
-			"offer_name": "Lean Spa US", 
-			"network_name": "eadv", 
-			"offer_url": "http://www.leanspa.com?s="
+			"name": "Lean Spa US", 
+			"network": 1, 
+			"url": "http://www.leanspa.com?s="
 			}
 		}, 
 	{"pk": 4, 
@@ -83,39 +97,39 @@
 			"price_old": "3.99", 
 			"active": true, 
 			"price_new": "1.99", 
-			"offer_name": "ColoThin", 
-			"network_name": "eadv", 
-			"offer_url": "http://www.colothin.com?s="
+			"name": "ColoThin", 
+			"network": 1, 
+			"url": "http://www.colothin.com?s="
 			}
 		}, 
 	{"pk": 1, 
 		"model": "clicks.domainofferset", 
 		"fields": {
-			"domain_name": "dailynews-7.com"
+			"name": "dailynews-7.com"
 		}
 	}, 
 	{"pk": 2, 
 		"model": "clicks.domainofferset", 
 		"fields": {
-			"domain_name": "channel9-news.com"
+			"name": "channel9-news.com"
 		}
 	}, 
 	{"pk": 3, 
 		"model": "clicks.domainofferset", 
 		"fields": {
-			"domain_name": " test1.billsforless.net"
+			"name": " test1.billsforless.net"
 		}
 	}, 
 	{"pk": 1, 
 		"model": "clicks.offerset", 
 		"fields": {
-			"category": "diet", 
+			"category": 1, 
 			"domain": 3, 
-			"offerset_name": "", 
+			"name": "", 
 			"offer1": 1, 
 			"offer2": 2, 
 			"total_offers": 2, 
-			"offerset_desc": "", 
+			"desc": "", 
 			"active": true
 		}
 	}, 

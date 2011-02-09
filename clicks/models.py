@@ -2,12 +2,34 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 import datetime
+class Category(models.Model):
+    name = models.CharField(max_length=30)
+    
+    class Meta:
+        verbose_name=_(u'Category')
+        verbose_name_plural=_(u'Categories')
+    
+    def __unicode__ (self):
+        return self.name
 
+class CpaNetwork(models.Model):
+    name = models.CharField(max_length=30, null = True) 
+    login = models.CharField(max_length=30, null = True) 
+    affiliate_id = models.CharField(max_length=30, null = True)
+    password = models.CharField(max_length=30, null = True)
+    
+    class Meta:
+        verbose_name=_(u'CpaNetwork')
+        verbose_name_plural=_(u'CpaNetworks')
+        
+    def __unicode__ (self):
+        return self.name
+    
 class LandingSite(models.Model):
     page1_template = models.CharField(max_length=30)
     page1_name = models.CharField(max_length=30)
     page1_desc = models.CharField(max_length=200, null = True)
-    category = models.CharField(max_length=30)
+    category = models.ForeignKey(Category, related_name='lamnding_sites')
     total_offers = models.IntegerField()
     exit_page_template  = models.CharField(max_length=30, null = True)
     redirect_on_exit = models.BooleanField(default = False)
@@ -22,9 +44,9 @@ class LandingSite(models.Model):
         return '%s/%s offers %d ratio %d' % (self.category, self.page1_name, self.total_offers, self.traffic_ratio)
 
 class Offer(models.Model):
-    network_name = models.CharField(max_length=30, null = True)
-    offer_name = models.CharField(max_length=30)
-    offer_url = models.URLField()
+    network = models.ForeignKey(CpaNetwork)
+    name = models.CharField(max_length=30)
+    url = models.URLField()
     offer_id = models.CharField(max_length=10, null = True)
     payout = models.FloatField()
     display_name = models.CharField(max_length=30, null=True)
@@ -38,25 +60,25 @@ class Offer(models.Model):
         verbose_name_plural=_(u'Offers')
         
     def __unicode__ (self):
-        return '%s/%s payout %d' % (self.network_name, self.offer_name, self.payout)
+        return '%s/%s payout %d' % (self.network.name, self.name, self.payout)
         
 class DomainOfferSet(models.Model):
-    domain_name = models.CharField(max_length = 50)
+    name = models.CharField(max_length = 50)
     
     class Meta:
         verbose_name=_(u'Domain offer set')
         verbose_name_plural=_(u'Domain offer sets')
         
     def __unicode__ (self):
-        return self.domain_name
+        return self.name
     
 class OfferSet(models.Model):
     offer1 = models.ForeignKey(Offer, related_name = "first_offer")
     offer2 = models.ForeignKey(Offer, related_name = "second_offer", null = True)
     total_offers = models.IntegerField()
-    offerset_name = models.CharField(max_length=50)
-    offerset_desc = models.CharField(max_length=100)
-    category = models.CharField(max_length=30)
+    name = models.CharField(max_length=50)
+    desc = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, related_name='offer_sets')
     active = models.BooleanField(default=False)
     domain = models.ForeignKey(DomainOfferSet)
 
@@ -65,7 +87,7 @@ class OfferSet(models.Model):
         verbose_name_plural=_(u'Offer sets')
         
     def __unicode__ (self):
-        return '%s/%s/%s' % (self.domain, self.category, self.offerset_name)
+        return '%s/%s/%s' % (self.domain, self.category, self.name)
 
 class SiteOfferSet(models.Model):
     site = models.ForeignKey(LandingSite)
@@ -97,7 +119,7 @@ class Visitor(models.Model):
     campaign = models.CharField(max_length=30,null=True)
     domain = models.CharField(max_length=50,null=True)
     ad = models.CharField(max_length=30,null=True)
-    category = models.CharField(max_length=30,null=True)
+    category = models.ForeignKey(Category, related_name='visitors')
     topic_name = models.CharField(max_length=50,null=True)
     site = models.ForeignKey(LandingSite, related_name = "site",null=True)
     offerset = models.ForeignKey(OfferSet, null = True)
