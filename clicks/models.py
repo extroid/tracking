@@ -3,7 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 
 import datetime
 
-# Create your models here.
 class LandingSite(models.Model):
     page1_template = models.CharField(max_length=30)
     page1_name = models.CharField(max_length=30)
