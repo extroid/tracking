@@ -117,7 +117,7 @@ class Visitor(models.Model):
     testing = models.CharField(max_length=30, null=True)
     safeview = models.CharField(max_length=30, null=True)
     campaign = models.CharField(max_length=30,null=True)
-    domain = models.ForeignKey(DomainOfferSet, 'visitors')
+    domain = models.ForeignKey(DomainOfferSet, related_name='visitors')
     ad = models.CharField(max_length=30,null=True)
     category = models.ForeignKey(Category, related_name='visitors')
     topic_name = models.CharField(max_length=50,null=True)
