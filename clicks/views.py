@@ -41,7 +41,7 @@ def show_exit_page(request, visitor_id):
 
 
 
-def go_to_offer_from_exit(request, visitor_id, position, someid=None, linktag=None):
+def go_to_offer_from_exit(request, visitor_id, position, linktag=None):
     v = get_visitor(visitor_id)
     v.site = get_visitor_site(v)
     v.offerset = get_visitor_offerset(v)
@@ -50,7 +50,7 @@ def go_to_offer_from_exit(request, visitor_id, position, someid=None, linktag=No
         aff_link = Offer.objects.get(pk = v.offerset.offer1.id).url
     elif position == '2':
         aff_link = Offer.objects.get(pk = v.offerset.offer2.id).url
-    redirect_url = str(aff_link)+str(create_subid(v,position,exit=True))
+    redirect_url = str(aff_link)+str(create_subid(v,position, linktag=linktag, exit=True))
     return redirect(redirect_url)
 
 
