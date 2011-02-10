@@ -35,7 +35,7 @@ def show_exit_page(request, visitor_id):
     v = get_visitor(visitor_id)
     v.site = get_visitor_site(v)
     v.offerset = get_visitor_offerset(v)
-    name, link = get_template_fields(v,exit=True)
+    name, link, coupon, old_price, new_price, tomorrow, today = get_template_fields(v,exit=True)
     return render_to_response('%s/%s' % (v.category.name,v.site.exit_page_template), locals())
 
 
