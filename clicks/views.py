@@ -96,10 +96,13 @@ def get_template_fields(v,exit=False):
     coupon =  [v.site, v.offerset.offer1.coupon, v.offerset.offer2.coupon ]
     old_price =  [v.site, v.offerset.offer1.price_old, v.offerset.offer2.price_old ]
     new_price =  [v.site, v.offerset.offer1.price_new, v.offerset.offer2.price_new ]
-    import time
-    time.strftime('%A, %B %d, %Y', time.localtime()) # today
+    
+    todayDate = datetime.date.today()
+    tomorrowDate = todayDate + datetime.timedelta(days=1)
+    today = todayDate.strftime('%A, %B %d, %Y')
+    tomorrow = tomorrowDate.strftime('%A, %B %d, %Y')
     #outgoing/visitor_id/offer_id/offer_position
-    return (name, link, coupon, old_price, new_price)
+    return (name, link, coupon, old_price, new_price, tomorrow, today)
     
 def create_visitor(request):
     print request.META
