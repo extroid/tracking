@@ -122,4 +122,4 @@ def valid_category(v):
 def create_subid(v,position,linktag=None,exit=False):
     if exit:
         exit = '-ex'
-    return "v:"+str(v.id)+"-p:"+position+"-l:"+str(linktag)+str(exit)
+    return "v:"+str(v.id)+"-p:"+position+"-l:"+str(linktag)+"-ex:"+str(exit)
