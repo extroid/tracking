@@ -1,6 +1,7 @@
 # Create your views here.
-from models import Visitor, LandingSite, OfferSet, Offer, SiteOfferSet, DomainOfferSet
+from models import Visitor, LandingSite, OfferSet, Offer, SiteOfferSet, DomainOfferSet, Category, CpaNetwork
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import *
 import random, urllib, datetime
 from django.shortcuts import render_to_response, redirect
 
@@ -11,14 +12,12 @@ force_domain_offerset = False
 def show_main_page(request, category):
     #brand new visitor!
     v = create_visitor(request)
-    v.category = category
-    if not valid_category(v): #make sure the category is in the list
-        return HttpResponse('Category %s is not valid'%category)
+    v.category = get_object_or_404(Category, name=category)
     v.site = get_visitor_site(v)
     v.offerset = get_visitor_offerset(v)
     v.save()
     name, link = get_template_fields(v)
-    return render_to_response('%s/%s' % (v.category,v.site.page1_template), locals())
+    return render_to_response('%s/%s' % (v.category.name,v.site.page1_template), locals())
 
 def go_to_offer(request, visitor_id, position, someid=None, linktag=None):
     v = get_visitor(visitor_id)
@@ -37,7 +36,7 @@ def show_exit_page(request, visitor_id):
     v.site = get_visitor_site(v)
     v.offerset = get_visitor_offerset(v)
     name, link = get_template_fields(v,exit=True)
-    return render_to_response('%s/%s' % (v.category,v.site.exit_page_template), locals())
+    return render_to_response('%s/%s' % (v.category.name,v.site.exit_page_template), locals())
 
 
 
@@ -77,8 +76,7 @@ def get_visitor_site(v):
 def get_visitor_offerset(v):
     if not v.offerset:
         if force_domain_offerset: #We match certain domains with certain offersets
-            domain_offer_set = DomainOfferSet.objects.filter(domain_name = v.domain)[0]
-            return OfferSet.objects.filter(category=v.category, domain = domain_offer_set).order_by('?')[:1][0]
+            return OfferSet.objects.filter(category=v.category, domain = v.domain).order_by('?')[:1][0]
         return OfferSet.objects.filter(category=v.category).order_by('?')[:1][0]
     else:
         return v.offerset
@@ -88,7 +86,7 @@ def get_template_fields(v,exit=False):
         exitstr = '/exitclick/'#clicks from exit page
     else:
         exitstr = '/redirect/'#clicks from main page
-    name = [v.site, v.offerset.offer1.offer_name, v.offerset.offer2.offer_name ]
+    name = [v.site, v.offerset.offer1.name, v.offerset.offer2.name ]
     link = [v.site, exitstr+str(v.id)+'/1',
                     exitstr+str(v.id)+'/2']
     #outgoing/visitor_id/offer_id/offer_position
@@ -97,10 +95,9 @@ def get_template_fields(v,exit=False):
 def create_visitor(request):
     v = Visitor()
     #get params
-    (v.referer, v.user_agent, v.domain) = (request.META.get('HTTP_REFERER'), 
-                                         request.META.get('HTTP_USER_AGENT'),
-                                         request.META.get('HTTP_HOST'),
-                                         )
+    v.referer = request.META.get('HTTP_REFERER')
+    v.user_agent = request.META.get('HTTP_USER_AGENT')
+    v.domain = get_object_or_404(DomainOfferSet, name=request.META.get('HTTP_HOST'))
     
     #get url params
     (v.adsource, v.account, v.ad, v.agegroup,v.image, v.channel, v.testing, 
