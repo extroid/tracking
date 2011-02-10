@@ -106,7 +106,7 @@ class Visitor(models.Model):
     date_time = models.DateTimeField(default = datetime.datetime.now())
     referer = models.URLField(null = True)
     ip_address = models.IPAddressField(null=True)
-    user_agent = models.CharField(max_length=100, null=True)
+    user_agent = models.CharField(max_length=512, null=True)
     query_dict = models.CharField(max_length=300, null=True)
     click_id = models.CharField(max_length=100, null=True)
     adsource = models.CharField(max_length=30, null=True)
