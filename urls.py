@@ -13,7 +13,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
-    (r'^redirect/(?P<visitor_id>[^/]+)/(?P<position>[^/]+)/?(?P<someid>[^/]+)?/?(?P<linktag>[^/]+)?','clicks.views.go_to_offer'),#outgoing click
+    (r'^redirect/(?P<visitor_id>[^/]+)/(?P<position>[^/]+)/?(?P<linktag>[^/]+)?','clicks.views.go_to_offer'),#outgoing click
     (r'^exit/(?P<visitor_id>[^/]+)','clicks.views.show_exit_page'),#exit page triggered
     (r'^exitclick/(?P<visitor_id>[^/]+)/(?P<position>[^/]+)/(?P<someid>[^/]+)?/?(?P<linktag>[^/]+)?','clicks.views.go_to_offer_from_exit'),#outgoing click
     (r'^([^/]+)','clicks.views.show_main_page'),#incoming clicks...
