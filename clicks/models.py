@@ -89,19 +89,6 @@ class OfferSet(models.Model):
     def __unicode__ (self):
         return '%s/%s/%s' % (self.domain, self.category, self.name)
 
-class SiteOfferSet(models.Model):
-    site = models.ForeignKey(LandingSite)
-    offer_set = models.ForeignKey(OfferSet)
-    traffic_ratio = models.IntegerField(default = 100)
-    active = models.BooleanField(default = True)
-    
-    class Meta:
-        verbose_name=_(u'Site offer set')
-        verbose_name_plural=_(u'Site offer sets')
-        
-    def __unicode__ (self):
-        return '%s/%s ratio %d' % (self.site, self.offer_set, self.traffic_ratio)
-
 class Visitor(models.Model):
     date_time = models.DateTimeField(default = datetime.datetime.now())
     referer = models.URLField(null = True)
