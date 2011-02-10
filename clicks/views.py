@@ -1,6 +1,6 @@
 # Create your views here.
 from models import Visitor, LandingSite, OfferSet, Offer, SiteOfferSet, DomainOfferSet, Category, CpaNetwork
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import *
 import random, urllib, datetime
 from django.shortcuts import render_to_response, redirect
@@ -76,7 +76,11 @@ def get_visitor_site(v):
 def get_visitor_offerset(v):
     if not v.offerset:
         if force_domain_offerset: #We match certain domains with certain offersets
-            return OfferSet.objects.filter(category=v.category, domain = v.domain).order_by('?')[0]
+            qset = OfferSet.objects.filter(category=v.category, domain = v.domain)
+            if qset.count()>0:
+                return OfferSet.objects.filter(category=v.category, domain = v.domain).order_by('?')[0]
+            else:
+                raise Http404
         return OfferSet.objects.filter(category=v.category).order_by('?')[0]
     else:
         return v.offerset
