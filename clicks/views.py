@@ -25,9 +25,9 @@ def go_to_offer(request, visitor_id, position, someid=None, linktag=None):
     v.offerset = get_visitor_offerset(v)
     aff_link = 0
     if position == '1':
-        aff_link = Offer.objects.get(pk = v.offerset.offer1.id).offer_url
+        aff_link = Offer.objects.get(pk = v.offerset.offer1.id).url
     elif position == '2':
-        aff_link = Offer.objects.get(pk = v.offerset.offer2.id).offer_url
+        aff_link = Offer.objects.get(pk = v.offerset.offer2.id).url
     redirect_url = str(aff_link)+str(create_subid(v,position))
     return redirect(redirect_url)
 
@@ -47,9 +47,9 @@ def go_to_offer_from_exit(request, visitor_id, position, someid=None, linktag=No
     v.offerset = get_visitor_offerset(v)
     aff_link = 0
     if position == '1':
-        aff_link = Offer.objects.get(pk = v.offerset.offer1.id).offer_url
+        aff_link = Offer.objects.get(pk = v.offerset.offer1.id).url
     elif position == '2':
-        aff_link = Offer.objects.get(pk = v.offerset.offer2.id).offer_url
+        aff_link = Offer.objects.get(pk = v.offerset.offer2.id).url
     redirect_url = str(aff_link)+str(create_subid(v,position,exit=True))
     return redirect(redirect_url)
 
