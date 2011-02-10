@@ -117,7 +117,7 @@
 	{"pk": 3, 
 		"model": "clicks.domainofferset", 
 		"fields": {
-			"name": " test1.billsforless.net"
+			"name": "test1.billsforless.net"
 		}
 	}, 
 	{"pk": 1, 

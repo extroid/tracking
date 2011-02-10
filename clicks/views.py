@@ -93,6 +93,7 @@ def get_template_fields(v,exit=False):
     return (name, link)
     
 def create_visitor(request):
+    print request.META
     v = Visitor()
     #get params
     v.referer = request.META.get('HTTP_REFERER')
