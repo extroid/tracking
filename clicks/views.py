@@ -28,7 +28,7 @@ def go_to_offer(request, visitor_id, position, someid=None, linktag=None):
         aff_link = Offer.objects.get(pk = v.offerset.offer1.id).url
     elif position == '2':
         aff_link = Offer.objects.get(pk = v.offerset.offer2.id).url
-    redirect_url = str(aff_link)+str(create_subid(v,position))
+    redirect_url = str(aff_link)+str(create_subid(v,position,linktag=linktag))
     return redirect(redirect_url)
 
 def show_exit_page(request, visitor_id):
