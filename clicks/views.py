@@ -19,7 +19,7 @@ def show_main_page(request, category):
     name, link, coupon, old_price, new_price, tomorrow, today = get_template_fields(v)
     return render_to_response('%s/%s' % (v.category.name,v.site.page1_template), locals())
 
-def go_to_offer(request, visitor_id, position, someid=None, linktag=None):
+def go_to_offer(request, visitor_id, position, linktag=None):
     v = get_visitor(visitor_id)
     v.site = get_visitor_site(v)
     v.offerset = get_visitor_offerset(v)
