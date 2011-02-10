@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response, redirect
 
 
 category_list = ['diet', 'finance', 'dating', 'penny-auction','skin-care']
-force_domain_offerset = False
+force_domain_offerset = True
 
 def show_main_page(request, category):
     #brand new visitor!
