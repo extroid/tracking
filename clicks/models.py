@@ -91,7 +91,7 @@ class OfferSet(models.Model):
 
 class Visitor(models.Model):
     date_time = models.DateTimeField(default = datetime.datetime.now())
-    referer = models.URLField(null = True)
+    referer = models.URLField(max_length=4096, null = True)
     ip_address = models.IPAddressField(null=True)
     user_agent = models.CharField(max_length=512, null=True)
     query_dict = models.CharField(max_length=300, null=True)
