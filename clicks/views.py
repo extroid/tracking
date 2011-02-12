@@ -33,8 +33,12 @@ def go_to_offer(request, visitor_id, position, linktag=None):
     aff_link = 0
     if position == '1':
         aff_link = Offer.objects.get(pk = v.offerset.offer1.id).url
+        v.offer1_click = True
     elif position == '2':
         aff_link = Offer.objects.get(pk = v.offerset.offer2.id).url
+        v.offer2_click = True
+    v.save()
+        
     redirect_url = str(aff_link)+str(create_subid(v,position,linktag=linktag))
     return redirect(redirect_url)
 
