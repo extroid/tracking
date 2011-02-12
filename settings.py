@@ -11,6 +11,19 @@ SITE_ROOT = os.path.dirname(__file__)
 
 MANAGERS = ADMINS
 
+import logging
+from sentry.client.handlers import SentryHandler
+
+logger = logging.getLogger()
+# ensure we havent already registered the handler
+if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
+    logger.addHandler(SentryHandler())
+
+    # Add StreamHandler to sentry's default so you can catch missed exceptions
+    logger = logging.getLogger('sentry.errors')
+    logger.propagate = False
+    logger.addHandler(logging.StreamHandler())
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -99,6 +112,11 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'clicks',
     'stats',
+     # don't forget to add the dependencies!
+    'indexer',
+    'paging',
+    'sentry',
+    'sentry.client'
 )
 
 try:

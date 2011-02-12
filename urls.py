@@ -12,9 +12,11 @@ urlpatterns = patterns('',
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
+    (r'^sentry/', include('sentry.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^redirect/(?P<visitor_id>[^/]+)/(?P<position>[^/]+)/?(?P<linktag>[^/]+)?','clicks.views.go_to_offer'),#outgoing click
     (r'^exit/(?P<visitor_id>[^/]+)','clicks.views.show_exit_page'),#exit page triggered
     (r'^exitclick/(?P<visitor_id>[^/]+)/(?P<position>[^/]+)/?(?P<linktag>[^/]+)?','clicks.views.go_to_offer_from_exit'),#outgoing click
     (r'^([^/]+)','clicks.views.show_main_page'),#incoming clicks...
+    
 )

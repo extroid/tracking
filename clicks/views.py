@@ -4,20 +4,27 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import *
 import random, urllib, datetime
 from django.shortcuts import render_to_response, redirect
-
+import logging
+from django.core.exceptions import ValidationError
+import sys
 
 category_list = ['diet', 'finance', 'dating', 'penny-auction','skin-care']
 force_domain_offerset = True
 
 def show_main_page(request, category):
     #brand new visitor!
-    v = create_visitor(request)
-    v.category = get_object_or_404(Category, name=category)
-    v.site = get_visitor_site(v)
-    v.offerset = get_visitor_offerset(v)
-    v.save()
-    name, link, coupon, old_price, new_price, tomorrow, today = get_template_fields(v)
-    return render_to_response('%s/%s' % (v.category.name,v.site.page1_template), locals())
+    try:
+        v = create_visitor(request)
+        v.category = get_object_or_404(Category, name=category)
+        v.site = get_visitor_site(v)
+        v.offerset = get_visitor_offerset(v)
+        v.full_clean()
+        v.save()
+        name, link, coupon, old_price, new_price, tomorrow, today = get_template_fields(v)
+        return render_to_response('%s/%s' % (v.category.name,v.site.page1_template), locals())
+    except (ValidationError, Http404), msg:
+        logging.error(msg, exc_info=sys.exc_info(), extra={'url': request.build_absolute_uri()})    
+        raise Http404
 
 def go_to_offer(request, visitor_id, position, linktag=None):
     v = get_visitor(visitor_id)
@@ -80,6 +87,7 @@ def get_visitor_offerset(v):
             if qset.count()>0:
                 return OfferSet.objects.filter(category=v.category, domain = v.domain).order_by('?')[0]
             else:
+                logging.error('There is no offer set for given visitor (%s, %s, %s)' % (v.referer, v.domain, v.adsource) )
                 raise Http404
         return OfferSet.objects.filter(category=v.category).order_by('?')[0]
     else:
@@ -105,12 +113,21 @@ def get_template_fields(v,exit=False):
     return (name, link, coupon, old_price, new_price, tomorrow, today)
     
 def create_visitor(request):
-    print request.META
     v = Visitor()
     #get params
-    v.referer = request.META.get('HTTP_REFERER')
-    v.user_agent = request.META.get('HTTP_USER_AGENT')
-    v.domain = get_object_or_404(DomainOfferSet, name=request.META.get('HTTP_HOST'))
+    try:
+        v.referer = request.META.get('HTTP_REFERER')
+    except KeyError, msg:
+        logging.error(msg, exc_info=sys.exc_info(), extra={'url': request.build_absolute_uri()})
+    try:        
+        v.user_agent = request.META.get('HTTP_USER_AGENT')
+    except KeyError, msg:
+        logging.error(msg, exc_info=sys.exc_info(), extra={'url': request.build_absolute_uri()})
+        
+    try:    
+        v.domain = get_object_or_404(DomainOfferSet, name=request.META.get('HTTP_HOST'))
+    except KeyError, msg:
+        logging.error(msg, exc_info=sys.exc_info(), extra={'url': request.build_absolute_uri()})    
     
     #get url params
     (v.adsource, v.account, v.ad, v.agegroup,v.image, v.channel, v.testing, 
@@ -123,6 +140,7 @@ def create_visitor(request):
                                       request.GET.get('testing','missing'),
                                       request.GET.get('safeview','missing'),
                                       )
+     
     return v
 
 def valid_category(v):
