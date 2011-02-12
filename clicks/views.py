@@ -135,7 +135,7 @@ def create_visitor(request):
     
     #get url params
     (v.adsource, v.account, v.ad, v.agegroup,v.image, v.channel, v.testing, 
-     v.safeview) = (request.GET.get('adsource','missing'),
+     v.safeview, v.topic_name) = (request.GET.get('adsource','missing'),
                                       request.GET.get('account','missing'),
                                       request.GET.get('ad','missing'),
                                       request.GET.get('agegroup','missing'),
@@ -143,6 +143,7 @@ def create_visitor(request):
                                       request.GET.get('channel','missing'),
                                       request.GET.get('testing','missing'),
                                       request.GET.get('safeview','missing'),
+                                      request.GET.get('topicname','missing'),
                                       )
      
     return v
