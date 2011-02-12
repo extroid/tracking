@@ -76,20 +76,20 @@ def get_visitor(visitor_id):
     return Visitor.objects.get(pk = visitor_id)
 def get_visitor_site(v):
     if not v.site:
-        return LandingSite.objects.filter(category=v.category).order_by('?')[0]#return 1st object in list
+        return LandingSite.objects.filter(category=v.category, active=True).order_by('?')[0]#return 1st object in list
     else:
         return v.site
     
 def get_visitor_offerset(v):
     if not v.offerset:
         if force_domain_offerset: #We match certain domains with certain offersets
-            qset = OfferSet.objects.filter(category=v.category, domain = v.domain)
+            qset = OfferSet.objects.filter(category=v.category, domain = v.domain, active=True)
             if qset.count()>0:
-                return OfferSet.objects.filter(category=v.category, domain = v.domain).order_by('?')[0]
+                return OfferSet.objects.filter(category=v.category, domain = v.domain, active=True).order_by('?')[0]
             else:
                 logging.error('There is no offer set for given visitor (%s, %s, %s)' % (v.referer, v.domain, v.adsource) )
                 raise Http404
-        return OfferSet.objects.filter(category=v.category).order_by('?')[0]
+        return OfferSet.objects.filter(category=v.category, active=True).order_by('?')[0]
     else:
         return v.offerset
 
