@@ -1,0 +1,15 @@
+{% block content %}
+    <a href="/main/">Back to index</a>
+    {% if message %}
+        <h3>{{message}}</h3>
+        <p><a href="/sentry/">See logs</a></p>
+    {% endif %}
+    <p>Input data:</p>
+    <form action="reports/add-subids/" method="post">
+        {% csrf_token %}
+        <table>
+        {{ form }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
