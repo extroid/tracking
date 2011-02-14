@@ -19,7 +19,6 @@ def index(request):
     return render_to_response("index.html")
  
 def show_main_page(request, category):
-    #return HttpResponse(category)    
     #brand new visitor!
     try:
         v = create_visitor(request)
