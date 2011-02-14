@@ -26,7 +26,7 @@ class CpaNetwork(models.Model):
         return self.name
     
 class LandingSite(models.Model):
-    pageTruemplate = models.CharField(max_length=30)
+    page1_template = models.CharField(max_length=30)
     page1_name = models.CharField(max_length=30)
     page1_desc = models.CharField(max_length=200, null = True)
     category = models.ForeignKey(Category, related_name='landing_sites')
