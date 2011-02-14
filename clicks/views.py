@@ -2,16 +2,24 @@
 from models import Visitor, LandingSite, OfferSet, Offer, SiteOfferSet, DomainOfferSet, Category, CpaNetwork
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import *
+from django.template import RequestContext
 import random, urllib, datetime
 from django.shortcuts import render_to_response, redirect
 import logging
 from django.core.exceptions import ValidationError
 import sys
+import settings
+
+from forms import SalesForm
 
 category_list = ['diet', 'finance', 'dating', 'penny-auction','skin-care']
 force_domain_offerset = True
 
+def index(request):
+    return render_to_response("index.html")
+ 
 def show_main_page(request, category):
+    #return HttpResponse(category)    
     #brand new visitor!
     try:
         v = create_visitor(request)
@@ -20,6 +28,7 @@ def show_main_page(request, category):
         v.offerset = get_visitor_offerset(v)
         # v.full_clean()
         v.save()
+        STATIC_URL = settings.MEDIA_URL
         name, link, coupon, old_price, new_price, tomorrow, today = get_template_fields(v)
         return render_to_response('%s/%s' % (v.category.name,v.site.page1_template), locals())
     except (ValidationError, Http404), msg:
@@ -40,17 +49,16 @@ def go_to_offer(request, visitor_id, position, linktag=None):
     v.save()
         
     redirect_url = str(aff_link)+str(create_subid(v,position,linktag=linktag))
-    return redirect(redirect_url)
+    #return redirect(redirect_url)
+    return render_to_response('outbound.htm', locals())
 
 def show_exit_page(request, visitor_id):
     v = get_visitor(visitor_id)
     v.site = get_visitor_site(v)
     v.offerset = get_visitor_offerset(v)
-    name, link, coupon, old_price, new_price, tomorrow, today = get_template_fields(v,exit=True)
+    name, link, coupon, old_price, new_price, tomorrow, today = get_template_fields(v,exit=True) 
+    STATIC_URL = settings.MEDIA_URL                    
     return render_to_response('%s/%s' % (v.category.name,v.site.exit_page_template), locals())
-
-
-
 
 def go_to_offer_from_exit(request, visitor_id, position, linktag=None):
     v = get_visitor(visitor_id)
@@ -62,11 +70,14 @@ def go_to_offer_from_exit(request, visitor_id, position, linktag=None):
     elif position == '2':
         aff_link = Offer.objects.get(pk = v.offerset.offer2.id).url
     redirect_url = str(aff_link)+str(create_subid(v,position, linktag=linktag, exit=True))
-    return redirect(redirect_url)
+    #return redirect(redirect_url)
+    return render_to_response('outbound.htm', locals())
 
-
-
-
+def hide_referer_and_exit(url):
+    #This function was put to hide the referer.
+    #It uses a template called 'outbound.htm'
+    #Which is send a simple url to meta refresh to
+    return render_to_response('outbound.htm', url)
 
 def get_offer_from_set():
     pass
@@ -153,6 +164,62 @@ def valid_category(v):
         return False
     else:
         return True
+
+def register_sales(request):
+    if request.method=='GET':
+        salesForm = SalesForm()
+        return render_to_response("reg_sales_form.html", 
+                                  {'form': salesForm},
+                                  context_instance=RequestContext(request))
+    elif request.method=='POST':
+        salesForm = SalesForm()
+        if request.POST:
+            
+            subids = request.POST['subids'].split('\n')
+            message = None
+            for subid in subids:
+                try:
+                    values = subid.split('-')
+                    vid = vpos = linktag = exit_val = None
+                    if len(values)==5:
+                        exit_val = '-ex'
+                    else:
+                        exit_val = values[3].split(':')[1].strip(' ') # offer_1_exit_sale    
+                    vid = int(values[0].split(':')[1])    
+                    vpos = values[1].split(':')[1].strip(' ') # offer_1_sale
+                    linktag = values[2].split(':')[1].strip(' ')
+                except (IndexError, TypeError), msg:
+                    logging.error(subid +' '+msg)
+                    logging.error(msg)
+                    message = 'During data process there were errors encountered. See error log for details'    
+                try:
+                    v = Visitor.objects.get(pk = vid)
+                    if vpos=='1':
+                        v.offer_1_sale = True if linktag!='None' else False
+                        v.offer_1_linktag = linktag if linktag!='None' else None
+                        v.offer_1_exit_sale = True if exit_val=='-ex' else False
+                        v.offer_1_revenue = v.offerset.offer1.payout
+                    elif vpos =='2':
+                        v.offer_2_sale = True if linktag else False
+                        v.offer_2_linktag = linktag if linktag!='None' else None
+                        v.offer_2_exit_sale = True if exit_val=='-ex' else False
+                        v.offer_2_revenue = v.offerset.offer2.payout
+                    else:
+                        logging.error(subid +' wrong position value '+vpos)
+                        message = 'During data process there were errors encountered. See error log for details'
+                    v.save()            
+                except Visitor.DoesNotExist, msg:
+                    logging.error(subid +' '+msg)    
+                    message = 'During data process there were errors encountered. See error log for details'
+                
+            salesForm = SalesForm(initial={'subids':request.POST['subids']})    
+            return render_to_response("reg_sales_form.html", 
+                                      {'form': salesForm, 'message':message },
+                                      context_instance=RequestContext(request))    
+        else:
+            return render_to_response("reg_sales_form.html", 
+                                      {'form': salesForm, 'message': 'No data to process. Format v:1360-p:2-l:None-ex:False'},
+                                      context_instance=RequestContext(request))    
     
 def create_subid(v,position,linktag=None,exit=False):
     if exit:

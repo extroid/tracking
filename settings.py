@@ -116,7 +116,8 @@ INSTALLED_APPS = (
     'indexer',
     'paging',
     'sentry',
-    'sentry.client'
+    'sentry.client',
+    'south'
 )
 
 try:
